@@ -15,6 +15,7 @@ from .models import Course
 class OwnerMixin:
     def get_queryset(self):
         qs = super().get_queryset()
+        return qs.filter(owner = self.request.user)
 
 
 class OwnerEditMixin:
@@ -39,10 +40,6 @@ class ManageCourseListView(OwnerCourseMixin, ListView):
     template_name = 'courses/manage/course/list.html'
     permission_required = 'courses.view_course'
 
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        return qs.filter(owner = self.request.user)
 
 class CourseCreateView(OwnerCourseEditMixin, CreateView):
     permission_required = 'courses.add_course'
