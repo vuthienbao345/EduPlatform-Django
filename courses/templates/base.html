@@ -1,0 +1,50 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+    {% block title %}
+        Elearn
+    {% endblock title %}
+        </title>
+        <link href="{% static 'css/base.css' %}" rel="stylesheet">
+</head>
+<body>
+    <div id="header">
+        <a href="/" class="logo">Elearn</a>
+        <ul class="menu">
+            
+            {% if request.user.is_authenticated %}
+            <li>
+                <form action="{% url 'logout' %}" method="post">
+                    <button type="submit">Sign out</button>
+                </form>
+            </li>
+                {% else %}
+                <form action="{% url 'login' %}" method="post">Sign in</form>
+            {% endif %}
+                
+        </ul>
+    </div>
+    <div class="content">
+        
+        {% block content %}
+            
+        {% endblock content %}
+        
+            
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+
+            // DOM loaded
+            {% block domready %}
+            {% endblock %}
+        })
+    </script>
+    
+</body>
+</html>
