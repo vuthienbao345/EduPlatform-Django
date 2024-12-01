@@ -1,6 +1,6 @@
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from django.shortcuts import get_object_or_404 ,render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
@@ -11,6 +11,7 @@ from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.detail import DetailView 
 
 from .models import Course, Subject
+from .forms import ModuleFormSet
 
 # Create your views here.
 
@@ -26,7 +27,7 @@ class OwnerEditMixin:
         form.instance.owner = self.request.user
         return super().form_valid(form)
     
-
+    
 class OwnerCourseMixin(
     OwnerMixin, LoginRequiredMixin, PermissionRequiredMixin
 ):
@@ -57,6 +58,43 @@ class CourseDeleteView(OwnerCourseMixin, DeleteView):
     permission_required = 'courses.delete_course'
     
 
+class CourseModuleUpdateView(TemplateResponseMixin, View):
+    template_name = 'courses/manage/module/formset.html'
+    course = None
+
+
+    def get_formset(self, data = None):
+        return ModuleFormSet(instance = self.course, data = data)
+
+
+    def dispatch(self, request, pk):
+        self.course = get_object_or_404(
+            Course, id = pk, owner = request.user
+        )
+
+        return super().dispatch(request, pk)
+    
+
+    def get(self, request, *args, **kwargs):
+        formset = self.get_formset()
+        return self.render_to_response(
+            {
+                'course': self.course,
+                'formset': formset,
+            }
+        )
+    
+    def post(self, request, *args, **kwargs):
+        formset = self.get_formset(data = request.POST)
+        if formset.is_valid():
+            formset.save()
+            return redirect('manage_course_list')
+        return self.render_to_response(
+            {
+                'course': self.course,
+                'formset': formset,
+            }
+        )
 
 class CourseListView(TemplateResponseMixin, View):
     model = Course
@@ -86,3 +124,5 @@ class CourseListView(TemplateResponseMixin, View):
 class CourseDetailView(DetailView):
     model = Course
     template_name = 'courses/course/detail.html'
+
+
