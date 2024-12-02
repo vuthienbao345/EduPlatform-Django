@@ -161,7 +161,7 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
             self.obj = get_object_or_404(
                 self.model, id=self.kwargs['id'], owner=request.user
             )
-        return super().dispatch(request, module_id, model_name)
+        return super().dispatch(request, module_id, model_name, id)
 
 
         # if id:
@@ -189,7 +189,7 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
 
         if form.is_valid():
             obj = form.save(commit = False)
-            obj = request.user
+            obj.owner = request.user
             obj.save()
 
             if not id:
@@ -215,3 +215,21 @@ class ContentDeleteView(View):
         content.item.delete()
         content.delete()
         return redirect('module_content_list', module.id)
+
+
+
+class ModuleContentListView(TemplateResponseMixin, View):
+    template_name = 'courses/manage/module/content_list.html'
+
+    def get(self, request, module_id):
+        print(f"Module ID: {module_id}")
+        module = get_object_or_404(
+            Module,
+            id = module_id,
+            course__owner = request.user
+        )
+
+        print(module.contents.all())
+
+
+        return self.render_to_response({'module': module})
