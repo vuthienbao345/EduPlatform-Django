@@ -15,6 +15,7 @@ from django.forms.models import modelform_factory
 from .models import Course, Subject, Module, Content
 from .forms import ModuleFormSet
 
+from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 # Create your views here.
 
 
@@ -222,14 +223,33 @@ class ModuleContentListView(TemplateResponseMixin, View):
     template_name = 'courses/manage/module/content_list.html'
 
     def get(self, request, module_id):
-        print(f"Module ID: {module_id}")
+        # print(f"Module ID: {module_id}")
         module = get_object_or_404(
             Module,
             id = module_id,
             course__owner = request.user
         )
 
-        print(module.contents.all())
-
 
         return self.render_to_response({'module': module})
+    
+
+class ModuleOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
+    def post(self, request):
+        for id, order in self.request__json.items():
+            Module.objects.filter(
+                id = id, course__owner = request.user
+            ).update(order = order)
+        return self.render_json_response({'saved':'OK'})
+    
+class ContentOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
+    def post(self, request):
+        for id, order in self.request__json.items():
+            Content.objects.filter(
+                id = id,
+                module__course__owner = request.user
+            ).update(order = order)
+        return self.render_json_response({
+            'saved': 'OK'
+        })
+    
