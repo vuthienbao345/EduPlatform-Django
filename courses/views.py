@@ -11,6 +11,8 @@ from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.detail import DetailView 
 from django.apps import apps
 from django.forms.models import modelform_factory
+from django.contrib import messages   
+
 
 from .models import Course, Module, Content, Subject
 from .forms import ModuleFormSet
@@ -169,9 +171,9 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
         self.model = self.get_model(model_name)
 
         
-        if 'id' in self.kwargs and self.kwargs['id']:
+        if id in self.kwargs and self.kwargs[id]:
             self.obj = get_object_or_404(
-                self.model, id=self.kwargs['id'], owner=request.user
+                self.model, id=self.kwargs[id], owner=request.user
             )
         return super().dispatch(request, module_id, model_name, id)
 
@@ -190,13 +192,15 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
                 'object': self.obj
             }
         )
+
+    
     
     def post(self, request, module_id, model_name, id = None):
         form = self.get_form(
             self.model,
             instance = self.obj,
             data = request.POST,
-            files = request.FILES
+            files = request.FILES,
         )
 
         if form.is_valid():
@@ -207,6 +211,7 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
             if not id:
                 # new content
                 Content.objects.create(module = self.module, item = obj)
+           
             return redirect('module_content_list', self.module.id)
         return self.render_to_response(
             {
@@ -241,7 +246,7 @@ class ModuleContentListView(TemplateResponseMixin, View):
             course__owner = request.user
         )
 
-
+        
         return self.render_to_response({'module': module})
     
 
