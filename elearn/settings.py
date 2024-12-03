@@ -43,6 +43,15 @@ INSTALLED_APPS = [
     'embed_video',
 ]
 
+
+CACHES = {
+    'default':{
+        'BACKEND': 'django.core.cahce.backends.memcached.PyMemecacheCache',
+        'LOCATION': '127.0.o.1:11211'
+    }
+}
+
+
 LOGIN_REDIRECT_URL = reverse_lazy('student_course_list')
 
 MIDDLEWARE = [
