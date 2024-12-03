@@ -22,6 +22,14 @@
                 {% endif %}>
                 
                 <a href="{% url 'module_content_list' m.id %}">
+                    {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
                 <span>
                     Module <span class="order">
                         {{ m.order|add:1 }}
@@ -48,7 +56,7 @@
                 {% for content in module.contents.all %}
                 <div data-id="{{ content.id }}">
                     
-                    {% with item=content.item %}
+                    {% with item=contents.item %}
                         <p>{{ item }} ({{ item|model_name }})</p>
 
                         <a href="{% url 'module_content_update' module.id item|model_name item.id %}">
@@ -59,6 +67,7 @@
                             {% csrf_token %}
 
                         </form>
+                        
                         
                     {% endwith %}
                         
@@ -152,7 +161,7 @@
             });
 
             // add a new order to the HTTP request options
-            options['body'] = JSON.stringify(contentOrderUrl)
+            options['body'] = JSON.stringify(contentOrder)
 
             // send HTTP request
             fetch(contentOrderUrl, options)
