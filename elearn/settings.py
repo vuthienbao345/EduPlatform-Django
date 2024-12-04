@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'embed_video',
     'debug_toolbar',
     'redisboard',
+    'rest_framework',
 ]
 
 
@@ -60,6 +61,14 @@ CACHE_MIDDLEWARE_KEY_PREFIX = 'elearn'
 
 
 LOGIN_REDIRECT_URL = reverse_lazy('student_course_list')
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
+
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',

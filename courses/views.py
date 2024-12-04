@@ -159,7 +159,7 @@ class CourseDetailView(DetailView):
 
 class ContentCreateUpdateView(TemplateResponseMixin, View):
     module = None
-    model = None
+    model = Course
     obj = None
     template_name = 'courses/manage/content/form.html'
 
@@ -210,6 +210,7 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
     
     
     def post(self, request, module_id, model_name, id = None):
+        print("post is ",request.POST)
         form = self.get_form(
             self.model,
             instance = self.obj,
@@ -220,13 +221,18 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
         if form.is_valid():
             obj = form.save(commit = False)
             obj.owner = request.user
+            print("model is ",self.model)
             obj.save()
-
-            if not id:
-                # new content
-                Content.objects.create(module = self.module, item = obj)
-           
+            print(obj)
             return redirect('module_content_list', self.module.id)
+
+
+            # if not id:
+            #     # new content
+            #     Content.objects.create(module = self.module, item = obj)
+                
+           
+            
         return self.render_to_response(
             {
                 'form': form,
