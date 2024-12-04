@@ -224,14 +224,11 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
             print("model is ",self.model)
             obj.save()
             print(obj)
-            return redirect('module_content_list', self.module.id)
-
-
-            # if not id:
-            #     # new content
-            #     Content.objects.create(module = self.module, item = obj)
-                
-           
+            
+            if not id:
+                # new content
+                Content.objects.create(module = self.module, item = obj)
+            return redirect('module_content_list', self.module.id)           
             
         return self.render_to_response(
             {
