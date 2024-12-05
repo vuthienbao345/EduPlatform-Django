@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'courses.apps.CoursesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'redisboard',
     'rest_framework',
     'chat.apps.ChatConfig',
+    
 ]
 
 
@@ -103,6 +105,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'elearn.wsgi.application'
+
+ASGI_APPLICATION = 'elearn.asgi.application'
 
 
 

@@ -224,6 +224,7 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
             print("model is ",self.model)
             obj.save()
             print(obj)
+            print(form.as_table())
             
             if not id:
                 # new content
