@@ -8,7 +8,7 @@ ADMINS = [
 ]
 
 # ALLOWED_HOSTS = ['*']
-ALLOWED_HOSTS = ['sebelearn.com', 'www.sebelearn.com']
+ALLOWED_HOSTS = ['.sebelearn.com']
 
 DATABASES = {
     'default': {
