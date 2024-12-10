@@ -1,3 +1,7 @@
+import redis
+
+from django.shortcuts import redirect
+from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -9,7 +13,11 @@ from django.views.generic.detail import DetailView
 from .forms import CourseEnrollForm
 from courses.models import Course
 
-
+r = redis.Redis(
+    host = settings.REDIS_HOST,
+    port = settings.REDIS_PORT,
+    db = settings.REDIS_DB,
+)
 
 # Create your views here.
 
@@ -67,15 +75,39 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         # get course object
         course = self.get_object()
-        if 'module_id' in self.kwargs:
 
+        # to store the last accessed module
+        redis_key = f"student:{self.request.user.id}:course:{course.id}:last_module"
+
+        if 'module_id' in self.kwargs:
+            
             # get current module
-            context['module'] = course.modules.get(
+            module = course.modules.get(
                 id = self.kwargs['module_id']
             )
+
+            r.set(redis_key, module.id)
+
+            context['module'] = module
+
+
         else:
-            # get first module
-            context['module_id'] = course.modules.all()[0]
+
+            # check redis for last accessed module id
+            last_module_id = r.get(redis_key)
+
+            if last_module_id:
+                # redirect to the last accessed module
+                return redirect(
+                    'studets:course_detail',
+                    pk = course.id,
+                    module_id = int(last_module_id)
+                )
+            
+            else:
+                # default to the first module
+                # get first module
+                context['module_id'] = course.modules.all()[0]
 
         return context
         

@@ -3,6 +3,7 @@ from django.views.decorators.cache import cache_page
 
 from . import views
 
+app_name  = 'students'
 
 urlpatterns = [
     path(
@@ -29,5 +30,12 @@ urlpatterns = [
         'course/<pk>/<module_id>/',
        cache_page(60 * 15)(views.StudentCourseDetailView.as_view()),
         name = 'student_course_detail_module'
+    ),
+
+    path(
+        'course/<int:pk>/module/<int:module_id>/', views.StudentCourseDetailView.as_view(), name = 'course_detail'
+    ),
+    path(
+        'course/<int:pk>/', views.StudentCourseDetailView.as_view(), name = 'course_detail'
     ),
 ]
