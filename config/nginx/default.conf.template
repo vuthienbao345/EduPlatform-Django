@@ -8,7 +8,7 @@ upstream daphne {
 
 server {
     listen          80;
-    server_name     www.sebelearn.com sebelearn.com;
+    server_name     *.sebelearn.com sebelearn.com;
     return 301 https://$host$request_uri;
 }
 
@@ -17,7 +17,7 @@ server {
     listen          443 ssl;
     ssl_certificate /code/elearn/ssl/elearn.crt;
     ssl_certificate_key /code/elearn/ssl/elearn.key;
-    server_name     www.sebelearn.com sebelearn.com;
+    server_name     *.sebelearn.com sebelearn.com;
     error_log       stderr warn;
     access_log      /dev/stdout main;
 
