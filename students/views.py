@@ -13,11 +13,11 @@ from django.views.generic.detail import DetailView
 from .forms import CourseEnrollForm
 from courses.models import Course
 
-r = redis.Redis(
-    host = settings.REDIS_HOST,
-    port = settings.REDIS_PORT,
-    db = settings.REDIS_DB,
-)
+# r = redis.Redis(
+#     host = settings.REDIS_HOST,
+#     port = settings.REDIS_PORT,
+#     db = settings.REDIS_DB,
+# )
 
 # Create your views here.
 
@@ -86,7 +86,7 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
                 id = self.kwargs['module_id']
             )
 
-            r.set(redis_key, module.id)
+            # r.set(redis_key, module.id)
 
             context['module'] = module
 
@@ -94,17 +94,17 @@ class StudentCourseDetailView(LoginRequiredMixin, DetailView):
         else:
 
             # check redis for last accessed module id
-            last_module_id = r.get(redis_key)
+            # last_module_id = r.get(redis_key)
 
-            if last_module_id:
-                # redirect to the last accessed module
-                return redirect(
-                    'studets:course_detail',
-                    pk = course.id,
-                    module_id = int(last_module_id)
-                )
+            # if last_module_id:
+            #     # redirect to the last accessed module
+            #     return redirect(
+            #         'studets:course_detail',
+            #         pk = course.id,
+            #         module_id = int(last_module_id)
+            #     )
             
-            else:
+            # else:
                 # default to the first module
                 # get first module
                 context['module_id'] = course.modules.all()[0]
