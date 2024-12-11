@@ -15,8 +15,8 @@ server {
 
 server {
     listen          443 ssl;
-    ssl_certificate /code/elearn/ssl/elearn.crt;
-    ssl_certificate_key /code/elearn/ssl/elearn.key;
+    ssl_certificate /code/ssl/elearn.crt;
+    ssl_certificate_key /code/ssl/elearn.key;
     server_name     *.sebelearn.com sebelearn.com;
     error_log       stderr warn;
     access_log      /dev/stdout main;
@@ -35,10 +35,10 @@ server {
     }
 
     location /static/ {
-        alias /code/elearn/static/;
+        alias /code/static/;
     }
 
     location /media/ {
-        alias /code/elearn/media/;
+        alias /code/media/;
     }
 }
