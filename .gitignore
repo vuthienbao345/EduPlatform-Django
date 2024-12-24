@@ -2,3 +2,5 @@ __pycache__
 data/db/
 data/cache/
 .env
+ssl/elearn.crt
+ssl/elearn.key
