@@ -1,7 +1,7 @@
 from decouple import config
 from .base import *
 
-DEBUG = False
+DEBUG = True
 
 ADMINS = [
     ('msomi', 'sebbievilar2@gmail.com'),
