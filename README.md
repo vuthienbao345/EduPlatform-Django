@@ -10,7 +10,7 @@
 
 ## 🚀 Overview
 
-**EduPlatform-Django** is a high-performance, scalable e-learning platform built with modern backend technologies. This project demonstrates advanced backend development practices, real-time communication, and AI-ready architecture designed to handle thousands of concurrent users with optimal performance.
+**Jifunze** is a high-performance, scalable e-learning platform built with modern backend technologies. This project demonstrates advanced backend development practices, real-time communication, and AI-ready architecture designed to handle thousands of concurrent users with optimal performance.
 
 ## 🎯 Key Features & Technical Highlights
 
